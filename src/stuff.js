@@ -361,3 +361,6 @@ function pacRotate(time){
       450-time*100%400][tic]
       ,ctx,time*1000,[0,PIH,PI,PIH*3][tic])
 }
+
+
+
