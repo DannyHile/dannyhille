@@ -1,22 +1,11 @@
 <script setup>
-import  appDialog  from './components/AppDialog.vue';
-
-function showDialog() {
-    const dialog = document.getElementById('appMainDialog');
-    dialog.showModal();
-}
-
+import mainApp from './components/mainApp.vue';
 </script>
 
 
 <template>
-    <app-dialog caption="test">
-        stuff here
-    </app-dialog>
-    <button @click="showDialog">Show Dialog</button>
+    <main-app caption="texxx"></main-app>
 </template>
-
-
 
 <style>
 </style>

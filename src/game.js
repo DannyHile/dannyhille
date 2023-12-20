@@ -8,23 +8,34 @@ let width,height;
 let renderFunc = ()=>{};
 const mouse={x:0,y:0,lb:0};
 const keys={};
+
+let spiral=[];
+
 onmouseup=onmousedown=onmousemove=e=>[mouse.x, mouse.y, mouse.lb]=[e.x, e.y, e.buttons===1?1:0];
 onkeydown=onkeyup=e=>{
     keys[e.key]=e.type==='keydown'?1:0;
     if(e.type==='keydown')
-        switch(e.key){
-            case"q":zzfx(...sounds.s1);break;
-            case"w":zzfx(...sounds.s2);break;
-            case"e":zzfx(...sounds.s3);break;
-            case"r":zzfx(...sounds.s4);break;
-            case"t":zzfx(...sounds.s5);break;
-            case"y":zzfx(...sounds.s6);break;
-            case"u":zzfx(...sounds.spark);break;
-            case"i":zzfx(...sounds.spark2);break;
-            case"o":zzfx(...sounds.spark3);break;
-            case"p":zzfx(...sounds.tweet);break;
-            case"å":zzfx(...sounds.s7);break;
-            case" ":zzfx(...sounds.spark3);for(let i=0; i<9; i++)sparks.push(new Spark(mouse.x,mouse.y));break;
+        switch(e.code){
+            case"KeyQ":zzfx(...sounds.s1);break;
+            case"KeyW":zzfx(...sounds.s2);break;
+            case"KeyE":zzfx(...sounds.s3);break;
+            case"KeyR":zzfx(...sounds.s4);break;
+            case"KeyT":zzfx(...sounds.s5);break;
+            case"KeyY":zzfx(...sounds.s6);break;
+            case"KeyU":zzfx(...sounds.spark);break;
+            case"KeyI":zzfx(...sounds.spark2);break;
+            case"KeyO":zzfx(...sounds.spark3);break;
+            case"KeyP":zzfx(...sounds.tweet);break;
+            case"BracketLeft":zzfx(...sounds.s7);break;
+            case"Space":zzfx(...sounds.spark3);for(let i=0; i<9; i++)sparks.push(new Spark(mouse.x,mouse.y));break;
+            case"KeyA":{
+                const track = new Set;
+                for(let i=0;i<26;i+=.05){
+                    track.add([innerWidth/2+Math.cos(i)*i*i|0,innerHeight/2+Math.sin(i)*i*i|0]);
+                }
+                spiral = Array.from(track);
+            }
+            break;
         }
 }
 
@@ -53,7 +64,10 @@ renderFunc = (time)=>{
         }
         spark.draw(gameCtx);
     }
-
+    for(let i=0; i<25&&spiral.length>0; i++){
+        const pos = spiral.pop();
+        sparks.push(new Spark(...pos));
+    }
     if(mouse.lb){
         for(let i=0; i<5; i++)
             sparks.push(new Spark(mouse.x,mouse.y));
