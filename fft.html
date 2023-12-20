@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Audio Visualizer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.min.js" integrity="sha512-b/htz6gIyFi3dwSoZ0Uv3cuv3Ony7EeKkacgrcVg8CMzu90n777qveu0PBcbZUA7TzyENGtU+qZRuFAkfqgyoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<body>
+    <canvas id="canvas" style="position:fixed;top:0;left:0;z-index: -1;"></canvas>
+    <button onclick="init()">Start</button>
+
+<script>
+        
+
+ctx = canvas.getContext("2d");
+
+
+async function init() {
+    audioCtx = new AudioContext();
+    const media = await navigator.mediaDevices
+        .getUserMedia({ audio: true});
+    const audioInput = audioCtx.createMediaStreamSource(media);
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    audioInput.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    const bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
+    let draw;
+    (draw=(t)=>{
+        canvas.width=innerWidth;
+        canvas.height=innerHeight;
+        ctx.fillRect(Math.cos(t/1000)*innerWidth/2+innerWidth/2,Math.sin(t/1000)*innerHeight/2+innerHeight/2,10,10);
+        analyser.getByteFrequencyData(dataArray);
+        //console.log(dataArray);
+        for(let i=dataArray.length;i--;){
+            ctx.fillRect(i*3,innerHeight,2,-dataArray[i]*9);
+            
+        }
+        requestAnimationFrame(draw);
+})(0);
+    
+
+}
+
+</script>
+</body>
+</html>

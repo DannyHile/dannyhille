@@ -39,7 +39,7 @@ function gameLoop(t=0){
 gameLoop();
 
 
-/*renderFunc = (time)=>{
+renderFunc = (time)=>{
     gameCtx.fillStyle='white';
     gameCtx.fillText(JSON.stringify(mouse),0,10);
     gameCtx.fillText(JSON.stringify(keys),0,20);
@@ -65,4 +65,4 @@ gameLoop();
             sparks.push(new Spark(...pos))
         
     }
-}*/
+}
