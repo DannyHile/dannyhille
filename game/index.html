@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game</title>
+    <style>
+        body,html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        #gameCanvas {
+            background-color: #ff0;
+            display: block;
+            margin: auto;
+            aspect-ratio: 16/9;
+            max-width: 100vw;
+            max-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="1920" height="1080"></canvas>
+
+    <script src="game.js"></script>
+    <script>
+        const game = new GameEngine(gameCanvas);
+        game.start();
+    </script>
+</body>
+</html>
