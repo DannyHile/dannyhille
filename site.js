@@ -1,4 +1,4 @@
-import GistApi from './GithubApi.js'
+import {GistApi} from './GithubApi.js'
   //*****************************************/
   
   const gapi = new GistApi(localStorage.githubPAT); 
