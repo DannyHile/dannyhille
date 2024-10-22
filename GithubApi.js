@@ -1,5 +1,7 @@
 /**/
 export class GistApi {
+    baseUrl = 'https://api.github.com';
+
     constructor(githubPersonalAccessToken) {
         this.PAT = githubPersonalAccessToken;
     }
@@ -14,7 +16,7 @@ export class GistApi {
             }
         }
     }
-    baseUrl = 'https://api.github.com';
+    
     publicOpt() {
         return { headers: { 'Accept': 'application/vnd.github+json' } };
     }
