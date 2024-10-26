@@ -15,5 +15,8 @@ ctx.fc=(r=0,g=0,b=0,a=1)=>ctx.fillStyle=`rgb(${r},${g},${b},${a})`;
     ctx.font='50px sans-serif'
     ctx.fillText(`${mouse[0]|0},${mouse[1]|0}`,10,50);
     ctx.fillText(`${JSON.stringify(keys)}`,10,100);
+    ctx.beginPath();
+    ctx.arc(mouse[0],mouse[1],15,0,7);
+    ctx.fill();
     requestAnimationFrame(animate);    
 })();
