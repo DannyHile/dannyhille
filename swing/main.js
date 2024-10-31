@@ -1,7 +1,7 @@
 const ctx = canvas.getContext("2d");
 ctx.fillStyle='#050505';
 ctx.fillRect(0,0,w=1920,h=1080);
-canvas.onclick=e=>canvas.requestFullscreen();
+//canvas.onclick=e=>canvas.requestFullscreen();
 const {sin,cos} = Math;
 ctx.fc=(r=0,g=0,b=0,a=1)=>ctx.fillStyle=`rgb(${r},${g},${b},${a})`;
 
