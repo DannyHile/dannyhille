@@ -15,8 +15,8 @@ onpointermove=ontouchmove=e=>{
   e.preventDefault();
   const cor = canvas.getBoundingClientRect();
   const {x,y} = (e.touches&&e.touches[0])||e;
-  const scaleX = cor.width/canvas.width;
-  const scaleY = cor.height/canvas.height;
-  window.mouse[0] = clamp((x-cor.x)/scaleX,0,canvas.width);
-  window.mouse[1] = clamp((y-cor.y)/scaleY,0,canvas.height);
+  //const scaleX = cor.width/canvas.width;
+  //const scaleY = cor.height/canvas.height;
+  window.mouse[0] = x;
+  window.mouse[1] = y;
 };

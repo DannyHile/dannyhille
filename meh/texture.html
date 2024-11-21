@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+<script type="fragment-shader" id="fragmentShader">
+precision highp float;
+
+uniform float time;
+uniform vec2 resolution;
+uniform vec4 mouse;
+
+varying vec2 v_texcoord;
+uniform sampler2D u_texture;
+
+#define sz 300.
+
+void main()
+{
+    vec2 size = vec2(resolution.x/sz,-resolution.y/sz);
+    vec4 color = vec4(0,0,0,1);
+    for(float i=0.;i<6.283;i+=6.283/8.)
+        color=max(color,texture2D(u_texture,(v_texcoord*size+.5)+vec2(cos(time*1.4+i),sin(time*1.2+i))));
+  
+    gl_FragColor = color;
+  }
+</script>
+
+<script id="vertexShader" type="vertex-shader">
+  precision mediump float;
+  attribute vec2 a_position;
+  attribute vec2 a_texcoord;
+  varying vec2 v_texcoord;
+  void main() {
+    v_texcoord = a_texcoord;
+    gl_Position = vec4(a_position, 0, 1);
+  }
+</script>
+
+
+<img id="imgLockyBlock" type="shader-texture" style="display:none" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAElBMVEUAAAAAAAD4+Pj42G7YnjaGVhYJ+HhgAAAAAXRSTlMAQObYZgAAAFtJREFUCNdVjsERgDAIBM8OAokFBG0gEzuQFMDD/luR4OiM+1q4exxAAbDIrqojgTe/sxq4iUg9XFicYigsxC4e0SOlt+iE1BzSKff385dzRmpYdTIMyxWkb8YNIfwUCskK/OYAAAAASUVORK5CYII=" />
+
+<script>const canvas = document.createElement("canvas");
+const glx = canvas.getContext("webgl2");
+let w = innerWidth, h = innerHeight;
+document.body.appendChild(canvas);
+canvas.style="position:fixed;width:100vw;height:100vh;top:0;left:0;z-index:-1";
+
+function loadTexture(img, glContext){
+	const canvasTexture = document.createElement("canvas");
+	[canvasTexture.width, canvasTexture.height] = [img.width,img.height];
+	with(canvasTexture.getContext("2d")){
+		drawImage(img,0,0);
+		glContext.bindTexture(glContext.TEXTURE_2D, glContext.createTexture());
+		glContext.texImage2D(glContext.TEXTURE_2D, 0, glContext.RGBA, img.width, img.height, 0, glContext.RGBA, glContext.UNSIGNED_BYTE, getImageData(0,0,img.width,img.height));
+		glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_WRAP_S, glContext.CLAMP_TO_EDGE);
+		glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_WRAP_T, glContext.CLAMP_TO_EDGE);
+		glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MIN_FILTER, glContext.NEAREST);
+		glContext.texParameteri(glContext.TEXTURE_2D, glContext.TEXTURE_MAG_FILTER, glContext.NEAREST);
+	}
+}
+
+
+
+glx.bindBuffer(glx.ARRAY_BUFFER, glx.createBuffer());
+glx.bufferData(glx.ARRAY_BUFFER,  new Float32Array([
+	-1.0,-1.0, 1.0, 
+	-1.0,-1.0, 1.0, 
+	-1.0, 1.0, 1.0, 
+	-1.0, 1.0, 1.0]), glx.STATIC_DRAW );
+loadTexture(imgLockyBlock, glx);
+const program = glx.createProgram();
+const vshader = glx.createShader(glx.VERTEX_SHADER);
+const fshader = glx.createShader(glx.FRAGMENT_SHADER);
+glx.shaderSource(vshader, vertexShader.innerText);
+glx.shaderSource(fshader, fragmentShader.innerText);
+glx.compileShader(vshader);
+glx.compileShader(fshader);
+glx.attachShader(program, vshader);
+glx.attachShader(program, fshader);
+glx.linkProgram(program);
+glx.useProgram(program);
+const positionLocation = glx.getAttribLocation(program, "a_position");
+glx.enableVertexAttribArray(positionLocation);
+glx.vertexAttribPointer(positionLocation, 2, glx.FLOAT, false, 0, 0);
+
+const texcoordLocation = glx.getAttribLocation(program, "a_texcoord");
+glx.enableVertexAttribArray(texcoordLocation);
+glx.vertexAttribPointer(texcoordLocation, 2, glx.FLOAT, false, 0, 0);
+
+glx.uniform2f(glx.getUniformLocation(program, "resolution"), w, h);
+
+const mouse = [0,0,0,0];
+onmousemove=e=>{
+	mouse[0]=e.x/w,
+	mouse[1]=e.y/h,
+	mouse[2]=e.buttons===0,
+	mouse[3]=e.buttons===1
+};
+
+
+
+function renderLoop(t=0){
+	canvas.width = w = innerWidth;
+	canvas.height = h = innerHeight;
+	glx.uniform2f(glx.getUniformLocation(program,"resolution"), w, h);
+	glx.viewport(0, 0, w, h);
+	glx.uniform1f(glx.getUniformLocation(program, "time"), t/1000);
+	glx.uniform4f(glx.getUniformLocation(program, "mouse"), ...mouse);
+	glx.drawArrays(glx.TRIANGLES, 0, 6);
+	requestAnimationFrame(renderLoop);
+}
+
+renderLoop();
+</script>
+</body>
+</html>
