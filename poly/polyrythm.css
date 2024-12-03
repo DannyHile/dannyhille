@@ -1,0 +1,17 @@
+html{
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    height: 100vh;
+}
+body{
+    background-color: #1d1d1d;
+    color: #fff;
+    height: 100vh;
+    display: grid;
+    overflow:hidden;
+    place-items: center;
+}
+canvas{
+    aspect-ratio: 384 / 800;
+    height:100vh;
+}
